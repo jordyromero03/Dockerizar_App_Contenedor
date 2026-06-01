@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ notice.title }} · NoticeBoard{% endblock %}
+
+{% block content %}
+
+  <div class="notice-detail">
+
+    <h1>{{ notice.title }}</h1>
+
+    <div class="notice-meta">
+      <span class="badge {{ notice.category | lower }}">{{ notice.category }}</span>
+      <span>Publicado por <strong>{{ notice.author }}</strong></span>
+      <span>{{ notice.created_at.strftime('%d de %B de %Y a las %H:%M') }}</span>
+    </div>
+
+    <div class="notice-body">{{ notice.content }}</div>
+
+    <div class="actions">
+      <a href="{{ url_for('main.index') }}" class="btn btn-secondary">
+        ← Volver al tablero
+      </a>
+
+      <form
+        method="POST"
+        action="{{ url_for('main.notice_delete', notice_id=notice.id) }}"
+        onsubmit="return confirm('¿Está seguro de que desea eliminar este anuncio?')"
+        style="display:inline;"
+      >
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+      </form>
+    </div>
+
+  </div>
+
+{% endblock %}

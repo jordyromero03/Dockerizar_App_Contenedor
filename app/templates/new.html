@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo anuncio · NoticeBoard{% endblock %}
+
+{% block content %}
+
+  <div class="form-card">
+    <h1>Nuevo anuncio</h1>
+
+    {% if errors %}
+      <ul class="errors">
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('main.new_notice_submit') }}">
+
+      <div class="form-group">
+        <label for="title">Título *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          maxlength="120"
+          required
+          value="{{ form_data.title if form_data else '' }}"
+          placeholder="Escribe un título claro y breve"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="author">Autor *</label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          maxlength="80"
+          required
+          value="{{ form_data.author if form_data else '' }}"
+          placeholder="Tu nombre o el del área"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categoría *</label>
+        <select id="category" name="category">
+          {% for cat in categories %}
+            <option
+              value="{{ cat }}"
+              {{ 'selected' if form_data and form_data.category == cat else '' }}
+            >
+              {{ cat }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="content">Contenido *</label>
+        <textarea
+          id="content"
+          name="content"
+          required
+          placeholder="Escribe aquí el cuerpo del anuncio..."
+        >{{ form_data.content if form_data else '' }}</textarea>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Publicar anuncio</button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancelar</a>
+      </div>
+
+    </form>
+  </div>
+
+{% endblock %}

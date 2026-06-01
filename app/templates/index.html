@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Tablero de Anuncios{% endblock %}
+
+{% block content %}
+
+  <h1 style="font-size:1.5rem; color:#1e3a5f; margin-bottom:1.2rem;">
+    Tablero de Anuncios
+  </h1>
+
+  <!-- Filtro por categoría -->
+  <div class="filter-bar">
+    <a href="{{ url_for('main.index') }}"
+       class="{{ 'active' if not selected else '' }}">
+      Todos
+    </a>
+    {% for cat in categories %}
+      <a href="{{ url_for('main.index', category=cat) }}"
+         class="{{ 'active' if selected == cat else '' }}">
+        {{ cat }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Lista de anuncios -->
+  {% if notices %}
+    <div class="notice-grid">
+      {% for notice in notices %}
+        <div class="notice-card cat-{{ notice.category | lower | replace(' ', '') }}">
+          <h2>
+            <a href="{{ url_for('main.notice_detail', notice_id=notice.id) }}">
+              {{ notice.title }}
+            </a>
+          </h2>
+          <div class="notice-meta">
+            <span class="badge {{ notice.category | lower }}">{{ notice.category }}</span>
+            <span>{{ notice.author }}</span>
+            <span>{{ notice.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+          </div>
+          <p class="notice-preview">{{ notice.content }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No hay anuncios
+        {% if selected %}en la categoría <strong>{{ selected }}</strong>{% endif %}
+        todavía.
+      </p>
+      <a class="btn btn-primary" href="{{ url_for('main.new_notice_form') }}">
+        Crear el primero
+      </a>
+    </div>
+  {% endif %}
+
+{% endblock %}
